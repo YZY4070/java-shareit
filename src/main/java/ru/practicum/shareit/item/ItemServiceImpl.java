@@ -4,9 +4,10 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.util.NotFoundException;
 
 import java.util.Collection;
 
@@ -18,11 +19,11 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
 
     @Override
-    public Item findById(Long id) {
-        return itemRepository.findById(id).orElseThrow(() -> {
+    public ItemDto findById(Long id) {
+        return ItemMapper.toDto(itemRepository.findById(id).orElseThrow(() -> {
             log.info("Вещь с id = {} не найдена!", id);
             return new NotFoundException("Вещь не найдена!");
-        });
+        }));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item updateItem(Item item) {
         checkUser(item.getOwnerId());
-        Item itemFromDB = findById(item.getId());
+        Item itemFromDB = itemRepository.findById(item.getId()).get();
         Item updatedItem = itemFromDB.toBuilder()
                 .name(item.getName() != null ? item.getName() : itemFromDB.getName())
                 .description(item.getDescription() != null ? item.getDescription() : itemFromDB.getDescription())

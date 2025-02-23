@@ -10,9 +10,6 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -23,8 +20,7 @@ public class ItemController {
     @GetMapping("/{id}")
     public ItemDto findByid(@PathVariable Long id) {
         log.info("Запрос на поиск вещи");
-        Item foundItem = itemService.findById(id);
-        return ItemMapper.toDto(foundItem);
+        return itemService.findById(id);
     }
 
     @GetMapping
