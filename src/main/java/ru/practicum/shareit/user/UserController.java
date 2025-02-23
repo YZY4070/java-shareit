@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,25 +17,21 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto findById(@PathVariable Long id) {
         log.info("Получение пользователя по id - {}", id);
-        User user = userService.findById(id);
-        return UserMapper.toUserDto(user);
+        return userService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody @Valid UserDto userDto) {
         log.info("Получен запрос на создание пользователя - {}", userDto);
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(userService.save(user));
+        return userService.save(userDto);
     }
 
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable Long id, @RequestBody UserDto userDto) {
         log.info("Получен запрос на обновления пользователя с ID - {}, данные для обновления: {}", id, userDto);
-
-        User user = UserMapper.toUser(userDto);
-        User updatedUser = userService.save(user.toBuilder().id(id).build());
-        return UserMapper.toUserDto(updatedUser);
+        userDto.setId(id);
+        return userService.save(userDto);
     }
 
     @DeleteMapping("/{id}")

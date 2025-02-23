@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.DuplicateException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 
@@ -15,19 +16,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> {
+    public UserDto findById(Long id) {
+        return UserMapper.toUserDto(userRepository.findById(id).orElseThrow(() -> {
             log.info("Пользователь с таким id = {} не существует!", id);
             return new NotFoundException("Пользователь с таким id = " + id + " не найден!");
-        });
+        }));
     }
 
     @Override
-    public User save(User user) {
+    public UserDto save(UserDto userDto) {
+        User user = UserMapper.toUser(userDto);
         validateEmail(user);
         if (user.getId() == null || userRepository.findById(user.getId()).isEmpty()) {
             log.info("Пользователь сохранён!");
-            return userRepository.save(user);
+            return UserMapper.toUserDto(userRepository.save(user));
         } else {
             User userFromDB = userRepository.findById(user.getId())
                     .orElseThrow(() -> new NotFoundException("Пользователь с id " + user.getId() + " не найден"));
@@ -37,7 +39,7 @@ public class UserServiceImpl implements UserService {
                     .email(user.getEmail() != null ? user.getEmail() : userFromDB.getEmail())
                     .build();
             log.info("Пользователь обновлен!");
-            return userRepository.save(updatedUser);
+            return UserMapper.toUserDto(userRepository.save(updatedUser));
         }
     }
 

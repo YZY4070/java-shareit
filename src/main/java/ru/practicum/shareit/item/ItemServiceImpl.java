@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,32 +28,34 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item save(Item item) {
+    public ItemDto addItem(ItemDto itemDto, Long ownerId) {
+        Item item = ItemMapper.toItem(itemDto, ownerId);
         checkUser(item.getOwnerId());
-        return itemRepository.save(item);
+        return ItemMapper.toDto(itemRepository.save(item));
     }
 
     @Override
-    public Item updateItem(Item item) {
-        checkUser(item.getOwnerId());
+    public ItemDto updateItem(ItemDto item, Long userId) {
+        findById(item.getId());
+        checkUser(userId);
         Item itemFromDB = itemRepository.findById(item.getId()).get();
         Item updatedItem = itemFromDB.toBuilder()
                 .name(item.getName() != null ? item.getName() : itemFromDB.getName())
                 .description(item.getDescription() != null ? item.getDescription() : itemFromDB.getDescription())
                 .available(item.getAvailable() != null ? item.getAvailable() : itemFromDB.getAvailable())
                 .build();
-        return itemRepository.save(updatedItem);
+        return ItemMapper.toDto(itemRepository.save(updatedItem));
     }
 
     @Override
-    public Collection<Item> findItemsByOwnerId(Long userId) {
-        userRepository.findById(userId);
-        return itemRepository.findItemsByOwnerId(userId);
+    public Collection<ItemDto> findItemsByOwnerId(Long ownerId) {
+        userRepository.findById(ownerId);
+        return itemRepository.findItemsByOwnerId(ownerId).stream().map(ItemMapper::toDto).collect(Collectors.toList());///
     }
 
     @Override
-    public Collection<Item> findItemByText(String text) {
-        return itemRepository.findItemByText(text);
+    public Collection<ItemDto> findItemByText(String text) {
+        return itemRepository.findItemByText(text).stream().map(ItemMapper::toDto).collect(Collectors.toList());
     }
 
 
