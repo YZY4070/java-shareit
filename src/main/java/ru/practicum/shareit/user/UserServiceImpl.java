@@ -43,11 +43,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public void delete(Long id) {
         findById(id);
         log.info("Пользователь обновлён!");
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
 

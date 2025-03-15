@@ -1,8 +1,14 @@
 package ru.practicum.shareit.item;
 
 import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.booking.dto.BookingInfoDto;
+import ru.practicum.shareit.item.comments.CommentDto;
+import ru.practicum.shareit.item.dto.ItemCommentsBookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
+
+import java.util.Collection;
 
 @UtilityClass
 public class ItemMapper {
@@ -12,18 +18,29 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
-                .requestId(item.getRequest())
+                .ownerId(item.getOwner().getId())
                 .build();
     }
 
-    public static Item toItem(ItemDto dto, Long ownerId) {
+    public static Item toItem(ItemDto dto, User owner) {
         return Item.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .owner(owner)
                 .available(dto.getAvailable())
-                .request(dto.getRequestId())
-                .ownerId(ownerId)
+                .build();
+    }
+
+    public static ItemCommentsBookingDto toSuperDto(Item item, Collection<CommentDto> comment, BookingInfoDto lastBooking, BookingInfoDto nextBooking) {
+        return ItemCommentsBookingDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .comments(comment)
+                .lastBooking(lastBooking)
+                .nextBooking(nextBooking)
                 .build();
     }
 }

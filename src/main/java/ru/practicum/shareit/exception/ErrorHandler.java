@@ -22,4 +22,17 @@ public class ErrorHandler {
                 "Ошибка входящих данных", e.getMessage()
         );
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handlerForbidden(final ForbiddenException e) {
+        return new ErrorResponse("Запрет на взаимодейстей с данными", e.getMessage());
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse onBadRequestException(final BadRequestException e) {
+        return new ErrorResponse("Неправильный запрос", e.getMessage()
+        );
+    }
 }
