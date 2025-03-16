@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.item.comments.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCommentsBookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -32,15 +31,13 @@ public class ItemMapper {
                 .build();
     }
 
-    public static ItemCommentsBookingDto toSuperDto(Item item, Collection<CommentDto> comment, BookingInfoDto lastBooking, BookingInfoDto nextBooking) {
+    public static ItemCommentsBookingDto toSuperDto(Item item, Collection<CommentDto> comment) {
         return ItemCommentsBookingDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .comments(comment)
-                .lastBooking(lastBooking)
-                .nextBooking(nextBooking)
                 .build();
     }
 }

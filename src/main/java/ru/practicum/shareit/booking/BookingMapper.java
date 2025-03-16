@@ -30,6 +30,9 @@ public class BookingMapper {
     }
 
     public static BookingInfoDto toBookingInfoDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
         return BookingInfoDto.builder()
                 .id(booking.getId())
                 .end(booking.getEndDate())

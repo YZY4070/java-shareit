@@ -15,6 +15,6 @@ public class ItemCommentsBookingDto {
     private String description;
     private Boolean available;
     private Collection<CommentDto> comments;
-    private BookingInfoDto nextBooking;
     private BookingInfoDto lastBooking;
+    private BookingInfoDto nextBooking;
 }

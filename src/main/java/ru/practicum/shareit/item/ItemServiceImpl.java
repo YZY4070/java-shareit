@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.comments.*;
@@ -41,13 +39,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(CommentMapper::toDto)
                 .toList();
 
-        Booking lastBooking = bookingRepository.findLastBookingByItemId(id);
-        Booking nextBooking = bookingRepository.findNextBookingByItemId(id);
-
-        BookingInfoDto lastBookingDto = (lastBooking != null) ? BookingMapper.toBookingInfoDto(lastBooking) : null;
-        BookingInfoDto nextBookingDto = (nextBooking != null) ? BookingMapper.toBookingInfoDto(nextBooking) : null;
-
-        return ItemMapper.toSuperDto(item, commentsDto, lastBookingDto, nextBookingDto);
+        return ItemMapper.toSuperDto(item, commentsDto);
     }
 
     @Override

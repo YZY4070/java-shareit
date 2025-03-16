@@ -17,20 +17,23 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Collection<Booking> findBookingsByItem_Owner_IdAndStatus(Long itemOwnerId, BookingStatus status);
 
-    @Query("""
-            SELECT b FROM Booking b
-            WHERE b.item.id = :itemId AND b.endDate < CURRENT_TIMESTAMP
-            ORDER BY b.endDate DESC
+    @Query(value = """
+            SELECT * FROM bookings
+            WHERE item_id = :itemId AND end_date < CURRENT_TIMESTAMP
+            ORDER BY end_date DESC
             LIMIT 1
-            """)
-    Booking findLastBookingByItemId(Long itemId);
+            """, nativeQuery = true)
+    Booking findLastBookingByItemId(@Param("itemId") Long itemId);
 
-    @Query("""
-            SELECT b FROM Booking b
-            WHERE b.item.id = :itemId AND b.startDate > CURRENT_TIMESTAMP
-            ORDER BY b.startDate ASC LIMIT 1
-            """)
-    Booking findNextBookingByItemId(Long itemId);
+
+    @Query(value = """
+            SELECT * FROM bookings
+            WHERE item_id = :itemId
+            AND start_date > CURRENT_TIMESTAMP
+            ORDER BY start_date ASC
+            LIMIT 1
+            """, nativeQuery = true)
+    Booking findNextBookingByItemId(@Param("itemId") Long itemId);
 
     @Query("""
             SELECT b
