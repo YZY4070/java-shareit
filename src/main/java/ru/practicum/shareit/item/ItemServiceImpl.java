@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -45,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addItem(ItemDto itemDto, Long ownerId) {
         checkUser(ownerId);
-        Item item = ItemMapper.toItem(itemDto, userRepository.findById(ownerId).get());
+        Item item = ItemMapper.toItem(itemDto, userRepository.findById(ownerId).orElseThrow(() -> new NotFoundException("User not found")));
         checkUser(item.getOwner().getId());
         return ItemMapper.toDto(itemRepository.save(item));
     }
@@ -54,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(ItemDto item, Long userId) {
         findById(item.getId());
         checkUser(userId);
-        Item itemFromDB = itemRepository.findById(item.getId()).get();
+        Item itemFromDB = itemRepository.findById(item.getId()).orElseThrow(() -> new NotFoundException("Item not found"));
         Item updatedItem = itemFromDB.toBuilder()
                 .name(item.getName() != null ? item.getName() : itemFromDB.getName())
                 .description(item.getDescription() != null ? item.getDescription() : itemFromDB.getDescription())
@@ -80,8 +81,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public CommentDto createComment(Long itemId, Long userId, CommentRequestDto request) {
         checkUser(userId);
-        checkItem(itemId);
-        Booking booking = bookingRepository.findBookingsByBookerIdAndStatus(userId, BookingStatus.APPROVED).stream()
+        Booking booking = bookingRepository.findBookingsByBookerIdAndStatus(userId, BookingStatus.APPROVED, Sort.by(Sort.Direction.DESC, "startDate")).stream()
                 .findFirst().orElseThrow(() -> new NotFoundException("Booking not found"));
 
         if (booking.getEndDate().isAfter(LocalDateTime.now()))
@@ -90,7 +90,7 @@ public class ItemServiceImpl implements ItemService {
         Comment comment = new Comment();
         comment.setText(request.getText());
         comment.setItemId(itemId);
-        comment.setAuthor(userRepository.findById(userId).get());
+        comment.setAuthor(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found")));
         comment.setCreated(LocalDateTime.now());
 
         commentRepository.save(comment);
@@ -106,8 +106,4 @@ public class ItemServiceImpl implements ItemService {
                 });
     }
 
-    private Item checkItem(Long itemId) {
-        return itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Item с id: " + itemId + " не найден"));
-    }
 }

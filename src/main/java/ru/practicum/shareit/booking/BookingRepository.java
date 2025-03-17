@@ -1,21 +1,36 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    Collection<Booking> findBookingsByBookerIdAndStatus(Long bookerId, BookingStatus status);
+    Collection<Booking> findBookingsByBookerId(Long bookerId, Sort sort);
 
-    Collection<Booking> findBookingsByBookerId(Long bookerId);
+    Collection<Booking> findBookingsByBookerIdAndStartDateIsBeforeAndEndDateIsAfter(Long bookerId, LocalDateTime start, LocalDateTime end, Sort sort);
 
-    Collection<Booking> findBookingsByItem_Owner_Id(Long itemOwnerId);
+    Collection<Booking> findBookingsByBookerIdAndEndDateIsBefore(Long bookerId, LocalDateTime end, Sort sort);
 
-    Collection<Booking> findBookingsByItem_Owner_IdAndStatus(Long itemOwnerId, BookingStatus status);
+    Collection<Booking> findBookingsByBookerIdAndStartDateIsAfter(Long bookerId, LocalDateTime start, Sort sort);
+
+    Collection<Booking> findBookingsByBookerIdAndStatus(Long bookerId, BookingStatus status, Sort sort);
+
+    Collection<Booking> findBookingsByItem_Owner_Id(Long itemOwnerId, Sort sort);
+
+    Collection<Booking> findByItem_Owner_IdAndStartDateIsBeforeAndEndDateIsAfter(Long itemOwnerId, LocalDateTime start, LocalDateTime end, Sort sort);
+
+    Collection<Booking> findByItem_Owner_IdAndEndDateIsBefore(Long itemOwnerId, LocalDateTime end, Sort sort);
+
+    Collection<Booking> findByItem_Owner_IdAndStartDateIsAfter(Long itemOwnerId, LocalDateTime start, Sort sort);
+
+    Collection<Booking> findBookingsByItem_Owner_IdAndStatus(Long itemOwnerId, BookingStatus status, Sort sort);
+
 
     @Query(value = """
             SELECT * FROM bookings
