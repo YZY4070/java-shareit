@@ -64,10 +64,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -124,6 +120,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
+                            <version>10.18.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -250,5 +247,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
