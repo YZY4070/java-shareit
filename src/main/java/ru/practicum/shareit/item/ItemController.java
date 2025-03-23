@@ -4,7 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.comments.CommentDto;
+import ru.practicum.shareit.item.comments.CommentRequestDto;
+import ru.practicum.shareit.item.dto.ItemCommentsBookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Collection;
@@ -17,7 +21,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/{id}")
-    public ItemDto findByid(@PathVariable Long id) {
+    public ItemCommentsBookingDto findByid(@PathVariable Long id) {
         log.info("Запрос на поиск вещи");
         return itemService.findById(id);
     }
@@ -51,4 +55,13 @@ public class ItemController {
         itemDto.setId(id);
         return itemService.updateItem(itemDto, ownerId);
     }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto createComment(@PathVariable long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") long userId,
+                                    @Validated @RequestBody CommentRequestDto request) {
+        return itemService.createComment(itemId, userId, request);
+    }
+
 }

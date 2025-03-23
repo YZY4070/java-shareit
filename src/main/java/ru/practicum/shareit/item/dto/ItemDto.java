@@ -19,5 +19,5 @@ public class ItemDto {
     @NotNull(message = "Наличие не должно быть null")
     private Boolean available;
 
-    private Long requestId;
+    private Long ownerId;
 }
