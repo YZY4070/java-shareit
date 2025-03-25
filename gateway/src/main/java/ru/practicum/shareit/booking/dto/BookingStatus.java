@@ -4,5 +4,9 @@ public enum BookingStatus {
     WAITING,
     APPROVED,
     REJECTED,
-    CANCELED
+    CANCELED;
+
+    public static BookingStatus fromString(String value) {
+        return BookingStatus.valueOf(value.toUpperCase());
+    }
 }

@@ -18,7 +18,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getBooking(@PathVariable long bookingId,
                                              @RequestHeader("X-Sharer-User-Id") long userId) {
-        return bookingClient.findById(userId, bookingId);
+        return bookingClient.getBooking(bookingId, userId);
     }
 
     @PatchMapping("/{bookingId}")
@@ -26,29 +26,29 @@ public class BookingController {
     public ResponseEntity<Object> setApprove(@PathVariable long bookingId,
                                              @RequestParam boolean approved,
                                              @RequestHeader("X-Sharer-User-Id") long ownerId) {
-        return bookingClient.updateStatus(ownerId, bookingId, approved);
+        return bookingClient.setApprove(bookingId, ownerId, approved);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> createBooking(@RequestBody @Valid BookingRequest newBookingRequest,
                                                 @RequestHeader("X-Sharer-User-Id") long userId) {
-        return bookingClient.create(userId, newBookingRequest);
+        return bookingClient.createBooking(userId, newBookingRequest);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getBookingByUserIdAndState(@RequestParam(defaultValue = "ALL") String state,
                                                              @RequestHeader("X-Sharer-User-Id") long userId) {
-        BookingStatus bookingState = BookingStatus.valueOf(state.toUpperCase());
-        return bookingClient.findAllByUserId(userId, bookingState);
+            BookingStatus bookingStatus = BookingStatus.fromString(state);
+            return bookingClient.getBookingByUserIdAndState(userId, bookingStatus.toString());
     }
 
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getBookingByOwnerIdAndState(@RequestParam(defaultValue = "ALL") String state,
                                                               @RequestHeader("X-Sharer-User-Id") long ownerId) {
-        BookingStatus bookingState = BookingStatus.valueOf(state.toUpperCase());
-        return bookingClient.findAllByOwnerId(ownerId, bookingState);
+            BookingStatus bookingStatus = BookingStatus.fromString(state);
+            return bookingClient.getBookingByOwnerIdAndState(ownerId, bookingStatus.toString());
     }
 }
