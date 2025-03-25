@@ -11,29 +11,19 @@
 
 	<groupId>ru.practicum</groupId>
 	<artifactId>shareit</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<name>ShareIt</name>
-	<modules>
-		<module>server</module>
-		<module>gateway</module>
-	</modules>
 
 	<properties>
 		<java.version>21</java.version>
-		<mapstruct.version>1.6.3</mapstruct.version>
-		<lombok.version>1.18.32</lombok.version>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
-			<optional>true</optional>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>gateway</module>
+		<module>server</module>
+	</modules>
 
 	<build>
 		<pluginManagement>
@@ -65,7 +55,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>3.1.2</version>
+					<version>3.2.1</version>
 					<configuration>
 						<configLocation>checkstyle.xml</configLocation>
 						<failOnViolation>true</failOnViolation>
@@ -136,17 +126,17 @@
 											<limit>
 												<counter>LINE</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.8</minimum>
+												<minimum>0.9</minimum>
 											</limit>
 											<limit>
 												<counter>BRANCH</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.3</minimum>
+												<minimum>0.6</minimum>
 											</limit>
 											<limit>
 												<counter>COMPLEXITY</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.5</minimum>
+												<minimum>0.6</minimum>
 											</limit>
 											<limit>
 												<counter>METHOD</counter>
@@ -156,7 +146,7 @@
 											<limit>
 												<counter>CLASS</counter>
 												<value>MISSEDCOUNT</value>
-												<maximum>4</maximum>
+												<maximum>1</maximum>
 											</limit>
 										</limits>
 									</rule>
@@ -172,38 +162,12 @@
 						</execution>
 					</executions>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<annotationProcessorPaths>
-							<path>
-								<groupId>org.mapstruct</groupId>
-								<artifactId>mapstruct-processor</artifactId>
-								<version>${mapstruct.version}</version>
-							</path>
-							<path>
-								<groupId>org.projectlombok</groupId>
-								<artifactId>lombok</artifactId>
-								<version>${lombok.version}</version>
-							</path>
-							<path>
-								<groupId>org.projectlombok</groupId>
-								<artifactId>lombok-mapstruct-binding</artifactId>
-								<version>0.2.0</version>
-							</path>
-						</annotationProcessorPaths>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
 	<profiles>
 		<profile>
 			<id>check</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<build>
 				<plugins>
 					<plugin>
