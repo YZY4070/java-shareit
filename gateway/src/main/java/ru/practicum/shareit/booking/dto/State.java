@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.dto;
 
-public enum BookingStatе {
+public enum State {
     ALL,          // Все бронирования
     CURRENT,      // Текущие бронирования
     PAST,         // Завершённые бронирования
@@ -8,7 +8,7 @@ public enum BookingStatе {
     WAITING,      // Ожидающие подтверждения
     REJECTED;
 
-    public static BookingStatе fromString(String value) {
-        return BookingStatе.valueOf(value.toUpperCase());
+    public static State fromString(String value) {
+        return State.valueOf(value.toUpperCase());
     }
 }

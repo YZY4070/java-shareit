@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingRequest;
-import ru.practicum.shareit.booking.dto.BookingStatе;
+import ru.practicum.shareit.booking.dto.State;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getBookingByUserIdAndState(@RequestParam(defaultValue = "ALL") String state,
                                                              @RequestHeader("X-Sharer-User-Id") long userId) {
-        BookingStatе stateParam = BookingStatе.fromString(state);
+        State stateParam = State.fromString(state);
         log.info("Get booking with state {}, userId={}", state, userId);
         return bookingClient.getBookingByUserIdAndState(userId, stateParam);
     }
@@ -52,7 +52,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getBookingByOwnerIdAndState(@RequestParam(defaultValue = "ALL") String state,
                                                               @RequestHeader("X-Sharer-User-Id") long ownerId) {
-        BookingStatе stateParam = BookingStatе.fromString(state);
+        State stateParam = State.fromString(state);
         log.info("Get owner bookings with state {}, ownerId={}", stateParam, ownerId);
         return bookingClient.getBookingByOwnerIdAndState(ownerId, stateParam);
     }
