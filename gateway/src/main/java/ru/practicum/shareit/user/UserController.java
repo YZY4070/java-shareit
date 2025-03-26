@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -33,7 +32,7 @@ public class UserController {
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody UserDto userDto) {
         log.info("Получен запрос на обновления пользователя с ID - {}, данные для обновления: {}", id, userDto);
         userDto.setId(id);
-        return userClient.update(id,userDto);
+        return userClient.update(id, userDto);
     }
 
     @DeleteMapping("/{id}")
