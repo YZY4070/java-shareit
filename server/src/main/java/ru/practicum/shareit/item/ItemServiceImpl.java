@@ -81,8 +81,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public CommentDto createComment(Long itemId, Long userId, CommentRequestDto request) {
         checkUser(userId);
+        itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Такой вещи нет!"));
         Booking booking = bookingRepository.findBookingsByBookerIdAndStatus(userId, BookingStatus.APPROVED, Sort.by(Sort.Direction.DESC, "startDate")).stream()
-                .findFirst().orElseThrow(() -> new NotFoundException("Booking not found"));
+                .findFirst().orElseThrow(() -> new NotFoundException("Пользователь c id=" + userId + " не брал вещь c id=" + itemId + " в аренду или аренда еще не завершена"));
 
         if (booking.getEndDate().isAfter(LocalDateTime.now()))
             throw new BadRequestException("Нельзя оставить комментарий, пока не закончилось бронирование");

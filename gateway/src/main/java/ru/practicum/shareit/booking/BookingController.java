@@ -15,7 +15,6 @@ import ru.practicum.shareit.booking.dto.State;
 @RequestMapping(path = "/bookings")
 public class BookingController {
     private final BookingClient bookingClient;
-    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
     @GetMapping("/{bookingId}")
     @ResponseStatus(HttpStatus.OK)
@@ -27,7 +26,7 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> setApprove(@PathVariable long bookingId,
-                                             @RequestParam boolean approved,
+                                             @RequestParam Boolean approved,
                                              @RequestHeader("X-Sharer-User-Id") long ownerId) {
         return bookingClient.setApprove(bookingId, ownerId, approved);
     }

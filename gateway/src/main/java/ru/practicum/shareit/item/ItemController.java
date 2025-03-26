@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -57,9 +56,9 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> createComment(@PathVariable long itemId,
                                                 @RequestHeader("X-Sharer-User-Id") long userId,
-                                                @Validated @RequestBody CommentRequestDto request) {
+                                                @RequestBody CommentRequestDto request) {
         log.info("Adding comment to itemId={}, userId={}, comment={}", itemId, userId, request);
-        return itemClient.createComment(itemId, userId, request);
+        return itemClient.createComment(userId, itemId, request);
     }
 
 }
