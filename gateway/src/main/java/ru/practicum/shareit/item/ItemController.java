@@ -48,7 +48,6 @@ public class ItemController {
                                          @RequestBody ItemDto itemDto) {
         log.info("Зарос на обновление вещи от пользователя с Id - {}", ownerId);
         log.info("Данные вещи: {}", itemDto);
-        itemDto.setId(id); //??????
         return itemClient.update(ownerId, id, itemDto);
     }
 

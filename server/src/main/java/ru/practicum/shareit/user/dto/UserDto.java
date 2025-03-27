@@ -1,7 +1,5 @@
 package ru.practicum.shareit.user.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,10 +8,7 @@ import lombok.Data;
 public class UserDto {
     private Long id;
 
-    @NotBlank(message = "Имя пользователя не может быть пустым")
     private String name;
 
-    @Email
-    @NotBlank(message = "email пользователя не может быть пустым")
     private String email;
 }
