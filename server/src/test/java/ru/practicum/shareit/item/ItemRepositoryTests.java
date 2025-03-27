@@ -35,6 +35,8 @@ public class ItemRepositoryTests {
     private User owner;
     private Item item;
     private Item item2;
+    private ItemRequest itemRequest;
+    private ItemRequest itemRequest2;
 
     @BeforeEach
     void setUp() {
@@ -49,18 +51,18 @@ public class ItemRepositoryTests {
         userRepository.save(owner);
         userRepository.save(owner2);
 
-        ItemRequest itemRequest = ItemRequest.builder()
+        itemRequest = ItemRequest.builder()
                 .description("Need a laptop for work")
                 .requester(owner)
                 .created(LocalDateTime.now())
                 .build();
-        ItemRequest itemRequest2 = ItemRequest.builder()
+        itemRequest2 = ItemRequest.builder()
                 .description("need rofls")
                 .requester(owner2)
                 .created(LocalDateTime.now())
                 .build();
-        itemRequestRepository.save(itemRequest);
-        itemRequestRepository.save(itemRequest2);
+        itemRequest = itemRequestRepository.save(itemRequest);
+        itemRequest2 = itemRequestRepository.save(itemRequest2);
 
         item = Item.builder()
                 .name("Test Item")
@@ -109,7 +111,7 @@ public class ItemRepositoryTests {
 
     @Test
     void findAllByRequestIdIn() {
-        Collection<Item> foundItems = itemRepository.findAllByRequestIdIn(List.of(1L));
+        Collection<Item> foundItems = itemRepository.findAllByRequestIdIn(List.of(itemRequest.getId()));
 
         System.out.println("Found items: " + foundItems.size());
         foundItems.forEach(item -> System.out.println("Item: " + item));
@@ -118,10 +120,9 @@ public class ItemRepositoryTests {
         assertTrue(foundItems.contains(item));
     }
 
-
     @Test
     void findAllByRequestId() {
-        Collection<Item> foundItems = itemRepository.findAllByRequestId(2L);
+        Collection<Item> foundItems = itemRepository.findAllByRequestId(itemRequest2.getId());
 
         assertEquals(1, foundItems.size());
         assertTrue(foundItems.contains(item2));
