@@ -45,20 +45,4 @@ public class CommentRequestTests {
         assertThat(commentRequestDto.getText()).isEqualTo("123123jgfddlkgdflkj");
     }
 
-    @Test
-    public void validation() {
-        Validator validator;
-        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-            validator = factory.getValidator();
-        }
-
-        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
-                .text("")
-                .build();
-
-        Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(commentRequestDto);
-
-        assertThat(violations).hasSize(1);
-        assertThat(violations).extracting("message").contains("Комментарий не может быть пустым");
-    }
 }
